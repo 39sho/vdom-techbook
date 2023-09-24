@@ -22,7 +22,7 @@ type VText = {
 type VTree = VNode | VText;
 
 declare namespace h.JSX {
-    type Element = VNode;
+    type Element = VTree;
     interface IntrinsicElements {
         [type: string]: VProps,
     }
