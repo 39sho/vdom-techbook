@@ -129,16 +129,28 @@ const state: State = {
     count: 0,
 };
 
+declare global {
+    interface Window {
+        handleClick: () => void,
+    }
+}
+
+window.handleClick = () => {
+    state.count = 0;
+};
+
+
 const render = ({ count }: State) => {
     return (
         <div>
+            <button type="button" onClick="handleClick();">RESET</button>
             <span class={count % 2 === 0 ? styles.red : styles.blue}>
                 count:
             </span>
             {count}
             <ul>
                 {
-                    [...Array(count).keys()].reverse().map(n => (
+                    [...Array(10).keys()].reverse().map(n => n + state.count).map(n => (
                         <li class={styles.li} key={n}>
                             {Array(5 - n.toString().length).fill('-').join('')} {n} {Array(5).fill('-').join('')}
                         </li>

@@ -29,7 +29,11 @@ declare namespace h.JSX {
 }
 
 
-type H = (tagName: string, props: VProps | null, ...children: Array<VTree | string | number | boolean | Array<VTree>> | []) => VTree;
+type H = (
+    tagName: string,
+    props: VProps | null,
+    ...children: Array<VTree | string | number | boolean | Array<VTree>> | []
+) => VTree;
 
 const h: H = (tagName, props, ...children) => {
     const newChildren = children

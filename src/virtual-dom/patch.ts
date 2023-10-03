@@ -58,7 +58,7 @@ const patch: Patch = (root, patches) => {
                                     ? currNode.prepend(elem)
                                     : currNode.childNodes[move.index - 1].after(elem);
                             } else {
-                                currNode.childNodes[move.index - 1].remove();
+                                currNode.childNodes[move.index].remove();
                             }
                         }
                         break;
