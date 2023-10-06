@@ -92,14 +92,14 @@ const diffChildren: DiffChildren = (oldChildren, newChildren, patches, index, cu
         currPatches.push(patch);
     }
 
-    let leftNodeLen = 0;
+    let leftNodeLen = 1;
     let currIndex = index;
     oldChildren.forEach((oldChild, i) => {
         const newChild = diffs.children[i];
 
-        currIndex = leftNodeLen + currIndex + 1;
+        currIndex = leftNodeLen + currIndex;
         walk(oldChild, newChild, patches, currIndex);
-        leftNodeLen = oldChild.type === 'VText' ? 0 : oldChild.children.length;
+        leftNodeLen = count(oldChild)
     });
 };
 
@@ -115,4 +115,19 @@ export default diff;
 
 export type {
     Patches,
+};
+
+type Count = (vtree: VTree) => number;
+
+const count: Count = (vtree) => {
+    if (vtree.type === 'VText') {
+        return 1;
+    }
+
+    let n = 1;
+    for (const child of vtree.children) {
+        n += count(child);
+    }
+
+    return n;
 };

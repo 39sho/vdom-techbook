@@ -53,7 +53,7 @@ const patch: Patch = (root, patches) => {
                             if (move.type === 1) {
                                 const elem = createElement(move.item);
 
-                                /* { Type.Remove = 0, Type.Insert = 1 } */
+                                // { Type.Remove = 0, Type.Insert = 1 }
                                 currNode.childNodes[move.index - 1] == null
                                     ? currNode.prepend(elem)
                                     : currNode.childNodes[move.index - 1].after(elem);

@@ -150,7 +150,16 @@ const render = ({ count }: State) => {
             {count}
             <ul>
                 {
-                    [...Array(10).keys()].reverse().map(n => n + state.count).map(n => (
+                    [...Array(10).keys()].reverse().map(n => n + count).map(n => (
+                        <li class={styles.li} key={n}>
+                            {Array(5 - n.toString().length).fill('-').join('')} {n} {Array(5).fill('-').join('')}
+                        </li>
+                    ))
+                }
+            </ul>
+            <ul>
+                {
+                    [...Array(10).keys()].reverse().map(n => n + count).map(n => (
                         <li class={styles.li} key={n}>
                             {Array(5 - n.toString().length).fill('-').join('')} {n} {Array(5).fill('-').join('')}
                         </li>
@@ -169,10 +178,10 @@ init(root, currTree);
 setInterval(() => state.count++, 1000);
 
 const update = () => {
-    const newTree = render(state)
-    console.log(newTree)
+    const newTree = render(state);
+    console.log(newTree);
     const patches = diff(currTree, newTree);
-    console.log(patches)
+    console.log(patches);
     patch(root, patches);
     currTree = newTree;
 
