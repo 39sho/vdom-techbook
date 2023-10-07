@@ -150,8 +150,8 @@ const render = ({ count }: State) => {
             {count}
             <ul>
                 {
-                    [...Array(10).keys()].reverse().map(n => n + count).map(n => (
-                        <li class={styles.li} key={n}>
+                    [...Array(10).keys()].map(n => n + count).map(n => (
+                        <li class={(n - count) % 2 === 0 ? styles.oddLi : styles.li} key={n}>
                             {Array(5 - n.toString().length).fill('-').join('')} {n} {Array(5).fill('-').join('')}
                         </li>
                     ))

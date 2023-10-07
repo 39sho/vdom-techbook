@@ -92,10 +92,20 @@ const diffChildren: DiffChildren = (oldChildren, newChildren, patches, index, cu
         currPatches.push(patch);
     }
 
+    diffs.moves.forEach((move) => {
+        if (move.type === 0) {
+            oldChildren.splice(move.index, 1);
+        } else {
+            oldChildren.splice(move.index, 0, move.item);
+        }
+    });
+
+
+
     let leftNodeLen = 1;
     let currIndex = index;
     oldChildren.forEach((oldChild, i) => {
-        const newChild = diffs.children[i];
+        const newChild = newChildren[i];
 
         currIndex = leftNodeLen + currIndex;
         walk(oldChild, newChild, patches, currIndex);
