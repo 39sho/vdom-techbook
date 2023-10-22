@@ -1,5 +1,5 @@
 import listDiff from 'list-diff2';
-import type { VProps, VText, VTree } from './h';
+import type { VProps, VText, VDom } from './h';
 
 type TextPatch = {
     type: 'Text',
@@ -8,7 +8,7 @@ type TextPatch = {
 
 type ReplacePatch = {
     type: 'Replace',
-    value: VTree,
+    value: VDom,
 };
 
 type ReorderPatch = {
@@ -21,11 +21,11 @@ type PropsPatch = {
     value: VProps,
 };
 
-type Patch = TextPatch | ReplacePatch | ReorderPatch | PropsPatch;
+type PatchType = TextPatch | ReplacePatch | ReorderPatch | PropsPatch;
 
-type Patches = Array<Array<Patch>>;
+type Patches = Array<Array<PatchType>>;
 
-type Diff = (oldTree: VTree, newTree: VTree) => Patches;
+type Diff = (oldTree: VDom, newTree: VDom) => Patches;
 
 const diff: Diff = (oldTree, newTree) => {
     let index = 0;
@@ -34,14 +34,12 @@ const diff: Diff = (oldTree, newTree) => {
     return patches;
 };
 
-type Walk = (oldTree: VTree, newTree: VTree, patches: Patches, index: number) => void;
+type Walk = (oldTree: VDom, newTree: VDom, patches: Patches, index: number) => void;
 
 const walk: Walk = (oldTree, newTree, patches, index) => {
-    const currPatches: Array<Patch> = [];
+    const currPatches: Array<PatchType> = [];
 
-    if (newTree == null) {
-
-    } else if (oldTree.type === 'VText' && newTree.type === 'VText') {
+    if (oldTree.type === 'VText' && newTree.type === 'VText') {
         if (oldTree.value !== newTree.value) {
             const patch: TextPatch = {
                 type: 'Text',
@@ -76,9 +74,9 @@ const walk: Walk = (oldTree, newTree, patches, index) => {
         patches[index] = currPatches;
 };
 
-type ChildrenPatches = Moves<VTree>;
+type ChildrenPatches = Moves<VDom>;
 
-type DiffChildren = (oldChildren: Array<VTree>, newChildren: Array<VTree>, patches: Patches, index: number, currPatches: Array<Patch>) => void;
+type DiffChildren = (oldChildren: Array<VDom>, newChildren: Array<VDom>, patches: Patches, index: number, currPatches: Array<PatchType>) => void;
 
 const diffChildren: DiffChildren = (oldChildren, newChildren, patches, index, currPatches) => {
     const diffs = listDiff(oldChildren, newChildren, 'key');
@@ -100,8 +98,6 @@ const diffChildren: DiffChildren = (oldChildren, newChildren, patches, index, cu
         }
     });
 
-
-
     let leftNodeLen = 1;
     let currIndex = index;
     oldChildren.forEach((oldChild, i) => {
@@ -111,6 +107,21 @@ const diffChildren: DiffChildren = (oldChildren, newChildren, patches, index, cu
         walk(oldChild, newChild, patches, currIndex);
         leftNodeLen = count(oldChild)
     });
+};
+
+type Count = (vdom: VDom) => number;
+
+const count: Count = (vdom) => {
+    if (vdom.type === 'VText') {
+        return 1;
+    }
+
+    let n = 1;
+    for (const child of vdom.children) {
+        n += count(child);
+    }
+
+    return n;
 };
 
 type PropsPatches = VProps | null;
@@ -125,19 +136,4 @@ export default diff;
 
 export type {
     Patches,
-};
-
-type Count = (vtree: VTree) => number;
-
-const count: Count = (vtree) => {
-    if (vtree.type === 'VText') {
-        return 1;
-    }
-
-    let n = 1;
-    for (const child of vtree.children) {
-        n += count(child);
-    }
-
-    return n;
 };

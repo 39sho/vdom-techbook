@@ -10,7 +10,7 @@ type VNode = {
     type: 'VNode',
     tagName: string,
     props: VProps,
-    children: Array<VTree>,
+    children: Array<VDom>,
     key?: string,
 }
 
@@ -19,10 +19,10 @@ type VText = {
     value: string,
 };
 
-type VTree = VNode | VText;
+type VDom = VNode | VText;
 
 declare namespace h.JSX {
-    type Element = VTree;
+    type Element = VDom;
     interface IntrinsicElements {
         [type: string]: VProps,
     }
@@ -32,8 +32,8 @@ declare namespace h.JSX {
 type H = (
     tagName: string,
     props: VProps | null,
-    ...children: Array<VTree | string | number | boolean | Array<VTree>> | []
-) => VTree;
+    ...children: Array<VDom | string | number | boolean | Array<VDom>> | []
+) => VDom;
 
 const h: H = (tagName, props, ...children) => {
     const newChildren = children
@@ -55,12 +55,10 @@ const h: H = (tagName, props, ...children) => {
             return child;
         });
 
-    const newProps = props ?? {};
-
     const vnode: VNode = {
         type: 'VNode',
         tagName,
-        props: newProps,
+        props: props ?? {},
         children: newChildren,
     };
 
@@ -73,5 +71,5 @@ export type {
     VProps,
     VNode,
     VText,
-    VTree,
+    VDom,
 }

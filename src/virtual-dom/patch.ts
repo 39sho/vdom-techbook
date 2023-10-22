@@ -1,19 +1,19 @@
 import type { Patches } from './diff';
-import { VTree } from './h';
+import { VDom } from './h';
 
-type CreateElement = (vtree: VTree) => Node;
+type CreateElement = (vdom: VDom) => Node;
 
-const createElement: CreateElement = (vtree) => {
-    if (vtree.type === 'VText') {
-        return document.createTextNode(vtree.value);
+const createElement: CreateElement = (vdom) => {
+    if (vdom.type === 'VText') {
+        return document.createTextNode(vdom.value);
     } else {
-        const elem = document.createElement(vtree.tagName);
+        const elem = document.createElement(vdom.tagName);
 
-        for (const [key, value] of Object.entries(vtree.props)) {
+        for (const [key, value] of Object.entries(vdom.props)) {
             elem.setAttribute(key, value.toString());
         }
 
-        for (const child of vtree.children) {
+        for (const child of vdom.children) {
             elem.append(createElement(child));
         }
 
@@ -71,10 +71,10 @@ const patch: Patch = (root, patches) => {
     }
 };
 
-type Init = (root: Element, vtree: VTree) => void;
+type Init = (root: Element, vdom: VDom) => void;
 
-const init: Init = (root, vtree) => {
-    root.append(createElement(vtree));
+const init: Init = (root, vdom) => {
+    root.append(createElement(vdom));
 };
 
 export {

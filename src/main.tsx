@@ -1,121 +1,3 @@
-/*
-import { h } from './virtual-dom/h';
-import diff from './virtual-dom/diff';
-
-const render = () => {
-    return (
-        <div> Hello World <br /></div >
-    );
-};
-
-*/
-/*
-console.log(render());
-
-console.log(diff(<div></div>, <div></div>));
-console.log(diff(<div></div>, <div id="test"></div>));
-console.log(diff(<div></div>, <span></span>));
-console.log(diff(<div></div>, <div>hello</div>));
-console.log(diff(<div></div>, <div>hello<span>world</span></div>));
-
-console.log(diff(<div>hello<span>shota!</span></div>, <div>hello<span>world</span></div>));
-console.log(diff(<div>hello<span>shota!</span></div>, <div id="test">hello<span>world</span></div>));
-
-import listDiff from 'list-diff2';
-console.log(listDiff([{ id: 1 }, { id: 2 }, { id: 3 }], [{ id: 5 }, { id: 3 }, { id: 1 }], 'id'));
-*/
-
-/*
-たぶんlistDiffの戻り値のchildrenはoldListの内削除されないもの
-*/
-
-/*
-console.log(diff(
-    <div id="test">
-        hello
-        <span>world</span>
-        <span>!!!</span>
-    </div>,
-    <div>
-        hello
-        <span id="hoge">shota!</span>
-    </div>
-));
-
-console.log(diff(
-    <div></div>,
-    <div id="test">
-        hello
-        <span>world</span>
-        <span>!!!</span>
-    </div>
-));
-
-import { createElement, patch } from './virtual-dom/patch';
-
-const root = document.querySelector('#app')!;
-
-*/
-
-/*
-root.append(
-    createElement(
-        <div id="test">
-            hello
-            <span>world</span>
-            <span>!!!</span>
-        </div>
-    )
-);
-
-patch(root, diff(
-    <div id="test">
-        hello
-        <span>world</span>
-        <span>!!!</span>
-    </div>,
-    <div>
-        hello
-        <span id="hoge">shota!</span>
-    </div>
-));
-*/
-
-/*
-console.log(diff(
-    <div>
-        hello
-        <span id="hoge">shota!</span>
-    </div>,
-    <div id="test">
-        hello
-        <span>world</span>
-        <span>!!!</span>
-    </div>
-));
-
-root.append(
-    createElement(
-        <div>
-            hello
-            <span id="hoge">shota!</span>
-        </div>
-    )
-);
-
-patch(root, diff(
-    <div>
-        hello
-        <span id="hoge">shota!</span>
-    </div>,
-    <div id="test">
-        hello
-        <span>world</span>
-        <span>!!!</span>
-    </div>
-));
-*/
-
 import h from './virtual-dom/h';
 import diff from './virtual-dom/diff';
 import { init, patch } from './virtual-dom/patch';
@@ -139,7 +21,6 @@ window.handleClick = () => {
     state.count = 0;
 };
 
-
 const render = ({ count }: State) => {
     return (
         <div>
@@ -152,25 +33,6 @@ const render = ({ count }: State) => {
                 {
                     [...Array(10).keys()].map(n => n + count).map(n => (
                         <li class={(n - count) % 2 === 0 ? styles.oddLi : styles.li} key={n}>
-                            {Array(5 - n.toString().length).fill('-').join('')} {n} {Array(5).fill('-').join('')}
-                        </li>
-                    ))
-                }
-            </ul>
-            {/* リストアイテムのtextContentだけ更新するバージョン */}
-            <ul>
-                {
-                    [...Array(10).keys()].map(n => n + count).map(n => (
-                        <li class={(n - count) % 2 === 0 ? styles.oddLi : styles.li} key={n - count}>
-                            {Array(5 - n.toString().length).fill('-').join('')} {n} {Array(5).fill('-').join('')}
-                        </li>
-                    ))
-                }
-            </ul>
-            <ul>
-                {
-                    [...Array(10).keys()].reverse().map(n => n + count).map(n => (
-                        <li class={styles.li} key={n}>
                             {Array(5 - n.toString().length).fill('-').join('')} {n} {Array(5).fill('-').join('')}
                         </li>
                     ))
@@ -189,9 +51,9 @@ setInterval(() => state.count++, 1000);
 
 const update = () => {
     const newTree = render(state);
-    console.log(newTree);
+    // console.log(newTree);
     const patches = diff(currTree, newTree);
-    console.log(patches);
+    // console.log(patches);
     patch(root, patches);
     currTree = newTree;
 
